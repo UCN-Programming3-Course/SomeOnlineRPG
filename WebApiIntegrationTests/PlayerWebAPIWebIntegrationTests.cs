@@ -20,8 +20,8 @@ namespace WebApiIntegrationTests
     {
         private static HttpServer _server;
         private static string _baseAddress = "http://localhost/";
-        private static string _goodId = "f1bcbe52-ff61-43bf-bbf6-fe119f53209e";
-        private static string _badId = "f1bcbe50-ff61-43bf-bb96-ae119f53209e";
+        private const string GOOD_ID = "f1bcbe52-ff61-43bf-bbf6-fe119f53209e";
+        private const string BAD_ID = "f1bcbe50-ff61-43bf-bb96-ae119f53209e";
 
         [ClassInitialize]
         public static void HostWebAPI(TestContext testContext)
@@ -36,11 +36,11 @@ namespace WebApiIntegrationTests
 
             // Creating mock objects
             var mockedDBConn = new Mock<IRepository<Character>>();
-            mockedDBConn.Setup(dao => dao.GetById(Guid.Parse(_goodId)))
+            mockedDBConn.Setup(dao => dao.GetById(Guid.Parse(GOOD_ID)))
                 .Returns(new Character
                 {
                     Name = "Gilderoy Lockheart",
-                    WebId = Guid.Parse(_goodId),
+                    WebId = Guid.Parse(GOOD_ID),
                     Items = new string[] { "Wand", "Cape" }
                 });
 
@@ -67,7 +67,7 @@ namespace WebApiIntegrationTests
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(_baseAddress + "characters/" + _goodId)
+                RequestUri = new Uri(_baseAddress + "characters/" + GOOD_ID)
             };
             //request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -83,7 +83,7 @@ namespace WebApiIntegrationTests
         public void GetItemsTest200() // Test a successfull call to ../characters/[testid]/items
         {
             var client = new HttpClient(_server);
-            var request = new HttpRequestMessage(HttpMethod.Get, _baseAddress + "characters/" + _goodId + "/items");
+            var request = new HttpRequestMessage(HttpMethod.Get, _baseAddress + "characters/" + GOOD_ID + "/items");
 
             using (var response = client.SendAsync(request).GetAwaiter().GetResult())
             {
@@ -104,7 +104,7 @@ namespace WebApiIntegrationTests
             var request = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(_baseAddress + "characters/" + _badId)
+                RequestUri = new Uri(_baseAddress + "characters/" + BAD_ID)
             };
 
             using (var response = client.SendAsync(request).GetAwaiter().GetResult())
@@ -119,7 +119,7 @@ namespace WebApiIntegrationTests
         public void GetItemsTest404() // Test a successfull call to ../characters/[badid]/items
         {
             var client = new HttpClient(_server);
-            var request = new HttpRequestMessage(HttpMethod.Get, _baseAddress + "characters/" + _badId + "/items");
+            var request = new HttpRequestMessage(HttpMethod.Get, _baseAddress + "characters/" + BAD_ID + "/items");
 
             using (var response = client.SendAsync(request).GetAwaiter().GetResult())
             {

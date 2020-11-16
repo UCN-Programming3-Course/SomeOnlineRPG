@@ -32,6 +32,14 @@ namespace WebApiIntegrationTests
             Assert.IsNotNull(data);
             Assert.IsInstanceOfType(data, typeof(OkNegotiatedContentResult<CharacterDto>));
         }
+        
+        [TestMethod]
+        public void TestGetCharacterThatDoesntExists()
+        {
+            var data = _controller.GetCharacter(Guid.Parse(BAD_ID));
+            Assert.IsNotNull(data);
+            Assert.IsInstanceOfType(data, typeof(NotFoundResult));
+        }
 
         [TestMethod]
         public void TestGetItemsForCharacterThatExists()
