@@ -12,6 +12,7 @@ using GameDataAccessLayer.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using PlayerWebAPI;
+using PlayerWebAPI.Controllers;
 
 namespace WebApiIntegrationTests
 {
@@ -44,7 +45,7 @@ namespace WebApiIntegrationTests
                     Items = new string[] { "Wand", "Cape" }
                 });
 
-            // Configuring caontainer for dependency injection
+            // Configuring container for dependency injection
             var builder = new ContainerBuilder();
             builder.RegisterApiControllers(typeof(Startup).Assembly);
             builder.RegisterInstance(mockedDBConn.Object).As<IRepository<Character>>();
@@ -69,7 +70,7 @@ namespace WebApiIntegrationTests
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(_baseAddress + "characters/" + GOOD_ID)
             };
-            //request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             using (var response = client.SendAsync(request).GetAwaiter().GetResult())
             {

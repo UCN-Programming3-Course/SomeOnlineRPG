@@ -21,6 +21,7 @@ namespace WebApiIntegrationTests
         [TestInitialize]
         public void Initialize()
         {
+            // if this was mocked properbly, it would be an unit test 
             var repos = RepositoryFactory.Create<Character>(()=>new SqlConnection("data source=(localdb)\\mssqllocaldb;initial catalog=SomeOnlineRPG;integrated security=True"));
             _controller = new CharactersController(repos);
         }
